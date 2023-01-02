@@ -12,7 +12,6 @@ export default function PaletteListItem({ savedPaletteColor, setSavedColor, id }
       return "#" + rgbHex(`rgb(${color})`);
     });
     navigator.clipboard.writeText(copiedPallette);
-    console.log(copiedPallette);
   }
   return (
     <li className="group flex relative">

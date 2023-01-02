@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import ColorPalette from "./components/ColorPalette";
 import PaletteList from "./components/PaletteList";
 import "./App.css";

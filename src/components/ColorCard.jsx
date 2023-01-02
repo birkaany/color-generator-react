@@ -14,9 +14,6 @@ export default function ColorCard({ palette }) {
       <button onClick={copyColor} className="hover:bg-gray-300 p-3 rounded-full">
         <BiCopy />
       </button>
-      <button onClick={lockColor} className="hover:bg-gray-300 p-3 rounded-full">
-        <BiLockOpenAlt />
-      </button>
     </li>
   );
 }
