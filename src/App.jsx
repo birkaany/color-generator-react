@@ -6,7 +6,7 @@ import "./App.css";
 
 function App() {
   const [colorPalette, setColorPalette] = useState([]);
-  const [savedColor, setSavedColor] = useState([]);
+  const [savedColor, setSavedColor] = useState(() => JSON.parse(localStorage.getItem("Saved Palettes")) || []);
 
   const fetchData = async () => {
     const res = await fetch("http://colormind.io/api/", {
@@ -19,6 +19,10 @@ function App() {
 
     setColorPalette(data.result);
   };
+
+  useEffect(() => {
+    localStorage.setItem("Saved Palettes", JSON.stringify(savedColor));
+  }, [savedColor]);
 
   function handleSavePalette() {
     setSavedColor((prevState) => {
@@ -35,21 +39,34 @@ function App() {
   }, []);
 
   return (
-    <div className="App grid-rows-[70%_30%] grid-cols-none md:grid-cols-[70%_30%] md:grid-rows-none grid h-screen">
-      <ColorPalette colorPalette={colorPalette} />
-      <div className="flex flex-col justify-center items-center md:flex-row">
-        <div id="panel" className="flex flex-row md:flex-col gap-10">
-          <div className="buttons flex gap-5">
-            <button onClick={() => fetchData()} className="w-32 border-2 border-gray-600 rounded-md px-6 py-3 hover:bg-gray-600 hover:text-white transition-all">
-              Generate
-            </button>
-            <button onClick={handleSavePalette} className="w-32 border-2 border-gray-600 rounded-md px-6 py-3 hover:bg-gray-600 hover:text-white transition-all">
-              Save
-            </button>
-          </div>
+    <div className="App bg-black flex flex-col h-screen">
+      <header className="h-32 px-6 flex items-center container mx-auto">
+        <div className="flex w-full flex-col justify-between logo text-3xl font-bold font-logoFont text-white">
+          Color Generator
+          <span className="text-sm font-sans font-normal uppercase text-gray-400">Just generate and save</span>
+        </div>
+        <div className="buttons flex">
+          <button
+            onClick={() => fetchData()}
+            className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white">
+            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">Generate</span>
+          </button>
+          <button
+            onClick={handleSavePalette}
+            className="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white">
+            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">Save</span>
+          </button>
+        </div>
+      </header>
+      <main className="w-full grow">
+        <ColorPalette colorPalette={colorPalette} />
+      </main>
+      <section id="savedPaletteList" className="relative bg-transparent">
+        <div className="w-64 p-6 bg-white rounded-t-xl absolute bottom-0 left-0">
+          <h2>Saved Color Palettes</h2>
           <PaletteList savedPalette={savedColor} setSavedColor={setSavedColor} />
         </div>
-      </div>
+      </section>
     </div>
   );
 }
